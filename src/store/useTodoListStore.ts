@@ -9,10 +9,11 @@ type ListStore = {
    deleteTodo(id: TodoType['id']): void;
 };
 
-function getNewTodo() {
+function getNewTodo(): TodoType {
    return {
       id: crypto.randomUUID(),
       text: '',
+      isCompleted: false,
       date: new Date(),
       isEdited: false
    }

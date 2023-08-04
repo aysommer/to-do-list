@@ -6,26 +6,23 @@ import "./Todo.css";
 
 type TodoProps = TodoType;
 
-const Todo = memo(({ id, text, date, isEdited }: TodoProps) => {
+const Todo = memo(({
+   id,
+   text,
+   isCompleted,
+   date,
+   isEdited
+}: TodoProps) => {
    const inputRef = useRef<HTMLInputElement>(null);
    const [cachedText, setCachedText] = useState(text);
    const deleteTodo = useTodoListStore((state) => state.deleteTodo);
    const changeTodo = useTodoListStore((state) => state.changeTodo);
-   const focusedTodo = useTodoListStore((state) => state.focusedTodo);
 
    useEffect(() => {
       if (isEdited && inputRef.current) {
          inputRef.current.focus();
       }
-   }, [inputRef, isEdited])
-
-
-   const handleEnableEditing = useCallback(() => {
-      changeTodo({ id: focusedTodo, isEdited: false });
-      if (!isEdited) {
-         changeTodo({ id, isEdited: true });
-      }
-   }, [changeTodo, focusedTodo, id, isEdited]);
+   }, [inputRef, isEdited]);
 
    const handleBlur = useCallback(() => {
       changeTodo({ id, isEdited: false });
@@ -38,16 +35,20 @@ const Todo = memo(({ id, text, date, isEdited }: TodoProps) => {
       setCachedText(event.target.value);
    }, []);
 
+   const handleCheckTodo = useCallback(() => {
+      changeTodo({ id, isCompleted: !isCompleted });
+   }, [changeTodo, id, isCompleted])
+
    const handleDeleteTodo = useCallback(() => {
       deleteTodo(id);
    }, [deleteTodo, id]);
 
    return (
-      <div onClick={handleEnableEditing}>
+      <div>
+         <input type="checkbox" id={id} checked={isCompleted} onChange={handleCheckTodo}/>
          <input
             className="todo__input"
             placeholder="Type some text..."
-            disabled={!isEdited}
             ref={inputRef}
             type="text"
             value={cachedText}
