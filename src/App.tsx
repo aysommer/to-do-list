@@ -1,17 +1,30 @@
-import { useListStore } from "./store";
+import { TodoList } from "./components/todoList";
+import { useTodoListStore } from "./store";
 
-function App() {
-   const { todos, addTodo } = useListStore();
+function TopPanel() {
+   const addTodo = useTodoListStore((state) => state.addTodo);
 
    return (
-      <div>
-         <button onClick={addTodo}>
-            add todo
-         </button>
-         {todos.map((todo) => <div key={todo.id}>
-            {todo.text}
-         </div>)}
-      </div>
+      <button onClick={addTodo}>
+         add todo
+      </button>
+   )
+}
+
+function MainPanel() {
+   const todos = useTodoListStore((state) => state.todos);
+
+   return (
+      <TodoList items={todos} />
+   )
+}
+
+function App() {
+   return (
+      <main>
+         <TopPanel />
+         <MainPanel />
+      </main>
    )
 }
 

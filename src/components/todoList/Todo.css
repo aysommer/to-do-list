@@ -1,0 +1,7 @@
+.todo__input {
+  border-width: 0;
+}
+
+.todo__input:disabled {
+   border: transparent;
+}

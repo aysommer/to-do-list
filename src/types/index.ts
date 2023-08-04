@@ -1,1 +1,1 @@
-export type { Todo } from './ITodo';
+export type { TodoType } from './ITodo';
