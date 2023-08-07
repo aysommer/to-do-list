@@ -3,11 +3,15 @@ import { useTodoListStore } from "./store";
 
 function TopPanel() {
    const addTodo = useTodoListStore((state) => state.addTodo);
+   const todos = useTodoListStore((state) => state.todos);
 
    return (
-      <button onClick={addTodo}>
-         add todo
-      </button>
+      <div>
+         <div>Todos: {todos.length}</div>
+         <button onClick={addTodo}>
+            Add todo
+         </button>
+      </div>
    )
 }
 
