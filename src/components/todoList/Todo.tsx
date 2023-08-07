@@ -58,7 +58,7 @@ const Todo: FC<TodoProps> = memo(({
          />
          <input
             ref={inputRef}
-            className="todo__input"
+            className="todo__text"
             placeholder="Type some text..."
             type="text"
             name="text"
@@ -67,6 +67,7 @@ const Todo: FC<TodoProps> = memo(({
             onBlur={handleBlur}
          />
          <input
+            className="todo__date"
             type="date"
             name="date"
             value={date}

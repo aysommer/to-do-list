@@ -1,3 +1,7 @@
-.todo__input {
+.todo__text {
+   border-width: 0;
+}
+
+.todo__date {
    border-width: 0;
 }
