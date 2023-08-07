@@ -1,5 +1,12 @@
 import type { TodoType } from "../../types"
-import { memo, useCallback, useState, ChangeEvent, useRef, useEffect } from "react";
+import {
+   memo,
+   useCallback,
+   useState,
+   ChangeEvent,
+   useRef,
+   useEffect
+} from "react";
 import { useTodoListStore } from "../../store";
 
 import "./Todo.css";
@@ -15,6 +22,7 @@ const Todo = memo(({
 }: TodoProps) => {
    const inputRef = useRef<HTMLInputElement>(null);
    const [cachedText, setCachedText] = useState(text);
+   const [cachedDate, setCachedDate] = useState(date);
    const deleteTodo = useTodoListStore((state) => state.deleteTodo);
    const changeTodo = useTodoListStore((state) => state.changeTodo);
 
@@ -28,11 +36,24 @@ const Todo = memo(({
       changeTodo({ id, isEdited: false });
       if (text !== cachedText) {
          changeTodo({ id, text: cachedText });
+      } else if (date !== cachedDate) {
+         changeTodo({ id, date: cachedDate });
       }
-   }, [cachedText, changeTodo, id, text]);
+   }, [
+      cachedDate,
+      cachedText,
+      changeTodo,
+      date,
+      id,
+      text
+   ]);
 
    const handleChangeText = useCallback((event: ChangeEvent<HTMLInputElement>) => {
       setCachedText(event.target.value);
+   }, []);
+
+   const handleChangeDate = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+      setCachedDate(event.target.value)
    }, []);
 
    const handleCheckTodo = useCallback(() => {
@@ -45,7 +66,12 @@ const Todo = memo(({
 
    return (
       <div>
-         <input type="checkbox" id={id} checked={isCompleted} onChange={handleCheckTodo}/>
+         <input
+            type="checkbox"
+            id={id}
+            checked={isCompleted}
+            onChange={handleCheckTodo}
+         />
          <input
             className="todo__input"
             placeholder="Type some text..."
@@ -55,7 +81,12 @@ const Todo = memo(({
             onChange={handleChangeText}
             onBlur={handleBlur}
          />
-         <span>{date.toISOString()}</span>
+         <input
+            type="date"
+            value={cachedDate}
+            onChange={handleChangeDate}
+            onBlur={handleBlur}
+         />
          <button onClick={handleDeleteTodo}>x</button>
       </div>
    )

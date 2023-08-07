@@ -14,7 +14,7 @@ function getNewTodo(): TodoType {
       id: crypto.randomUUID(),
       text: '',
       isCompleted: false,
-      date: new Date(),
+      date: new Date().toISOString().split('T')[0],
       isEdited: false
    }
 }
