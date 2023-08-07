@@ -3,5 +3,4 @@ export type TodoType = {
    text: string;
    isCompleted: boolean;
    date: string;
-   isEdited: boolean;
 };

@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import type { TodoType } from '../../types';
 import Todo from './Todo';
 
@@ -5,7 +6,7 @@ type TodoListProps = {
    items: TodoType[];
 };
 
-function TodoList({ items = [] }: TodoListProps) {
+const TodoList: FC<TodoListProps> = ({ items = [] }) => {
    return (
       <section>
          {items.map((item) => <Todo key={item.id} {...item}/>)}

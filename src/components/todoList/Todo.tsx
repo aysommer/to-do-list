@@ -2,10 +2,10 @@ import type { TodoType } from "../../types"
 import {
    memo,
    useCallback,
-   useState,
    ChangeEvent,
+   FC,
    useRef,
-   useEffect
+   useEffect,
 } from "react";
 import { useTodoListStore } from "../../store";
 
@@ -13,48 +13,26 @@ import "./Todo.css";
 
 type TodoProps = TodoType;
 
-const Todo = memo(({
+const Todo: FC<TodoProps> = memo(({
    id,
    text,
    isCompleted,
    date,
-   isEdited
-}: TodoProps) => {
+}) => {
    const inputRef = useRef<HTMLInputElement>(null);
-   const [cachedText, setCachedText] = useState(text);
-   const [cachedDate, setCachedDate] = useState(date);
    const deleteTodo = useTodoListStore((state) => state.deleteTodo);
    const changeTodo = useTodoListStore((state) => state.changeTodo);
 
    useEffect(() => {
-      if (isEdited && inputRef.current) {
-         inputRef.current.focus();
-      }
-   }, [inputRef, isEdited]);
-
-   const handleBlur = useCallback(() => {
-      changeTodo({ id, isEdited: false });
-      if (text !== cachedText) {
-         changeTodo({ id, text: cachedText });
-      } else if (date !== cachedDate) {
-         changeTodo({ id, date: cachedDate });
-      }
-   }, [
-      cachedDate,
-      cachedText,
-      changeTodo,
-      date,
-      id,
-      text
-   ]);
-
-   const handleChangeText = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-      setCachedText(event.target.value);
+      inputRef?.current?.focus();
    }, []);
 
-   const handleChangeDate = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-      setCachedDate(event.target.value)
-   }, []);
+   const handleChangeData = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+      changeTodo({
+         id,
+         [event.target.name]: event.target.value
+      });
+   }, [changeTodo, id]);
 
    const handleCheckTodo = useCallback(() => {
       changeTodo({ id, isCompleted: !isCompleted });
@@ -63,6 +41,12 @@ const Todo = memo(({
    const handleDeleteTodo = useCallback(() => {
       deleteTodo(id);
    }, [deleteTodo, id]);
+
+   const handleBlur = useCallback(() => {
+      if (!text.length) {
+         deleteTodo(id);
+      }
+   }, [deleteTodo, id, text.length]);
 
    return (
       <div>
@@ -73,19 +57,20 @@ const Todo = memo(({
             onChange={handleCheckTodo}
          />
          <input
+            ref={inputRef}
             className="todo__input"
             placeholder="Type some text..."
-            ref={inputRef}
             type="text"
-            value={cachedText}
-            onChange={handleChangeText}
+            name="text"
+            value={text}
+            onChange={handleChangeData}
             onBlur={handleBlur}
          />
          <input
             type="date"
-            value={cachedDate}
-            onChange={handleChangeDate}
-            onBlur={handleBlur}
+            name="date"
+            value={date}
+            onChange={handleChangeData}
          />
          <button onClick={handleDeleteTodo}>x</button>
       </div>

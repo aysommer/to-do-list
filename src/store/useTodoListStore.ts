@@ -3,7 +3,6 @@ import { create } from 'zustand';
 
 type ListStore = {
    todos: TodoType[];
-   focusedTodo: TodoType['id'];
    addTodo(): void;
    changeTodo(todo: Partial<TodoType>): void;
    deleteTodo(id: TodoType['id']): void;
@@ -14,14 +13,12 @@ function getNewTodo(): TodoType {
       id: crypto.randomUUID(),
       text: '',
       isCompleted: false,
-      date: new Date().toISOString().split('T')[0],
-      isEdited: false
+      date: new Date().toISOString().split('T')[0]
    }
 }
 
 const useTodoListStore = create<ListStore>((set) => ({
    todos: [],
-   focusedTodo: '',
    addTodo() {
       return set((state) => {
          return {

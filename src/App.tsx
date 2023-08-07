@@ -1,29 +1,60 @@
+import { FC } from "react";
 import { TodoList } from "./components/todoList";
 import { useTodoListStore } from "./store";
 
-function TopPanel() {
+const Counter: FC = () => {
+   const length = useTodoListStore((state) => state.todos.length);
+
+   return (
+      <div>Todos: {length}</div>
+   )
+}
+
+const AddTodoButton: FC = () => {
    const addTodo = useTodoListStore((state) => state.addTodo);
-   const todos = useTodoListStore((state) => state.todos);
 
    return (
-      <div>
-         <div>Todos: {todos.length}</div>
-         <button onClick={addTodo}>
-            Add todo
-         </button>
-      </div>
+      <button onClick={addTodo}>
+         Add todo
+      </button>
    )
 }
 
-function MainPanel() {
-   const todos = useTodoListStore((state) => state.todos);
-
+const TopPanel: FC = () => {
    return (
-      <TodoList items={todos} />
+      <section>
+         <Counter />
+         <AddTodoButton />
+      </section>
    )
 }
 
-function App() {
+const MainPanel: FC = () => {
+   const activeTodos = useTodoListStore((state) => state.todos.filter((todo) => !todo.isCompleted));
+   const completedTodos = useTodoListStore((state) => state.todos.filter((todo) => todo.isCompleted));
+
+   return (
+      <section>
+         {(activeTodos.length) ? (
+            <>
+               <div>active</div>
+               <TodoList items={activeTodos} />
+            </>
+         ) : null}
+         {(completedTodos.length) ? (
+            <>
+               <div>completed</div>
+               <TodoList items={completedTodos} />
+            </>
+         ) : null}
+         {(!activeTodos.length && !completedTodos.length) ? (
+            <div>add something...</div>
+         ) : null}
+      </section>
+   )
+}
+
+const App: FC = () => {
    return (
       <main>
          <TopPanel />
