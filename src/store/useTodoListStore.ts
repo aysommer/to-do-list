@@ -8,6 +8,10 @@ type ListStore = {
    deleteTodo(id: TodoType['id']): void;
 };
 
+const LOCAL_STORAGE_KEYS = {
+   TODOS: 'todos'
+};
+
 function getNewTodo(): TodoType {
    return {
       id: crypto.randomUUID(),
@@ -17,8 +21,21 @@ function getNewTodo(): TodoType {
    }
 }
 
-const useTodoListStore = create<ListStore>((set) => ({
-   todos: [],
+function getTodosFromLocalStorage(): TodoType[] {
+   const rawData = localStorage.getItem(LOCAL_STORAGE_KEYS.TODOS);
+   if (!rawData) {
+      return [];
+   }
+   return JSON.parse(rawData);
+}
+
+export function cacheTodos(items: TodoType[]): void {
+   const parsedTodos = JSON.stringify(items);
+   localStorage.setItem(LOCAL_STORAGE_KEYS.TODOS, parsedTodos);
+}
+
+export const useTodoListStore = create<ListStore>((set) => ({
+   todos: getTodosFromLocalStorage(),
    addTodo() {
       return set((state) => {
          return {
@@ -49,5 +66,3 @@ const useTodoListStore = create<ListStore>((set) => ({
       });
    }
 }));
-
-export default useTodoListStore;
