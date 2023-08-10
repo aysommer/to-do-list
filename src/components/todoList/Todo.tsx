@@ -3,6 +3,7 @@ import {
    memo,
    useCallback,
    ChangeEvent,
+   KeyboardEvent,
    FC,
    useRef,
    useEffect,
@@ -21,6 +22,7 @@ const Todo: FC<TodoProps> = memo(({
    date,
 }) => {
    const inputRef = useRef<HTMLInputElement>(null);
+   const addTodo = useTodoListStore((state) => state.addTodo);
    const deleteTodo = useTodoListStore((state) => state.deleteTodo);
    const changeTodo = useTodoListStore((state) => state.changeTodo);
 
@@ -49,6 +51,12 @@ const Todo: FC<TodoProps> = memo(({
       }
    }, [deleteTodo, id, text.length]);
 
+   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLInputElement>) => {
+      if (text.length && event.key === 'Enter') {
+         addTodo();
+      }
+   }, [addTodo, text.length]);
+
    return (
       <div>
          <CheckBox
@@ -63,6 +71,7 @@ const Todo: FC<TodoProps> = memo(({
             type="text"
             name="text"
             value={text}
+            onKeyDown={handleKeyDown}
             onChange={handleChangeData}
             onBlur={handleBlur}
          />

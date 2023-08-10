@@ -8,7 +8,7 @@ const App: FC = () => {
    const cache = useTodoListStore((state) => state.cache);
 
    useEffect(() => {
-      window.addEventListener('unload', cache)
+      window.addEventListener('pagehide', cache)
    }, []);
 
    return (
