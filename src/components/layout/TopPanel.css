@@ -1,0 +1,6 @@
+.top-panel {
+   box-sizing: border-box;
+   display: flex;
+   justify-content: space-between;
+   padding: var(--offset-m);
+}

@@ -7,6 +7,7 @@ import {
    useRef,
    useEffect,
 } from "react";
+import { CheckBox } from "../checkBox";
 import { useTodoListStore } from "../../store";
 
 import "./Todo.css";
@@ -50,8 +51,7 @@ const Todo: FC<TodoProps> = memo(({
 
    return (
       <div>
-         <input
-            type="checkbox"
+         <CheckBox
             id={id}
             checked={isCompleted}
             onChange={handleCheckTodo}

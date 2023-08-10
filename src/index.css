@@ -1,3 +1,30 @@
+:root  {
+   --background-color: #F2F1F7;
+   --offset-xs: 4px;
+   --offset-s: 8px;
+   --offset-m: 16px;
+   --offset-l: 20px;
+   --offset-xl: 24px;
+}
+
+.w-full {
+   width: 100%;
+}
+
+.h-full {
+   height: 100%;
+}
+
 * {
+   margin: 0;
    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+html, body, #root {
+   height: 100%;
+   width: 100%;
+}
+
+body {
+   background-color: var(--background-color);
 }

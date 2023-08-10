@@ -6,6 +6,7 @@ type ListStore = {
    addTodo(): void;
    changeTodo(todo: Partial<TodoType>): void;
    deleteTodo(id: TodoType['id']): void;
+   cache(): void;
 };
 
 const LOCAL_STORAGE_KEYS = {
@@ -34,7 +35,7 @@ export function cacheTodos(items: TodoType[]): void {
    localStorage.setItem(LOCAL_STORAGE_KEYS.TODOS, parsedTodos);
 }
 
-export const useTodoListStore = create<ListStore>((set) => ({
+export const useTodoListStore = create<ListStore>((set, get) => ({
    todos: getTodosFromLocalStorage(),
    addTodo() {
       return set((state) => {
@@ -64,5 +65,9 @@ export const useTodoListStore = create<ListStore>((set) => ({
             todos: state.todos.filter((todo) => todo.id !== id)
          }
       });
+   },
+   cache() {
+      const state = get();
+      cacheTodos(state.todos);
    }
 }));
